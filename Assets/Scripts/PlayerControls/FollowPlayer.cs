@@ -3,12 +3,14 @@ using System.Collections;
 
 public class FollowPlayer : MonoBehaviour {
 
-    public GameObject player;
-    public Rigidbody playerRigidbody;
+    private GameObject player;
+    private Transform playerTransform;
+    private Rigidbody playerRigidbody;
 
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = player.transform.Find("Head");
 	}
 
     void FixedUpdate() {
