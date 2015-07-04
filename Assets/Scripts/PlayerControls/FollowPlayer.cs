@@ -3,22 +3,23 @@ using System.Collections;
 
 public class FollowPlayer : MonoBehaviour {
 
-    private GameObject player;
-    private Transform playerTransform;
-    private Rigidbody playerRigidbody;
+    public GameObject followObject;
 
-	// Use this for initialization
+    private GameObject player;
+    private NavMeshAgent navMeshAgent;
+
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerTransform = player.transform.Find("Head");
+        navMeshAgent = GetComponent<NavMeshAgent>();
 	}
 
     void FixedUpdate() {
+        Vector3 vectorToPlayer = transform.position - player.transform.position;
+        vectorToPlayer.Scale(new Vector3(1, 0, 1));
 
+        if (vectorToPlayer.sqrMagnitude > 1) {
+            Debug.Log("Resetting path");
+            navMeshAgent.SetDestination(followObject.transform.position);
+        }
     }
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
