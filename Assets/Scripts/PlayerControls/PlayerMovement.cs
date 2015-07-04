@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour {
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
-        headTransform = transform.Find("Head");
+        //headTransform = transform.Find("Head");
+        headTransform = transform.Find("PelvisRoot");
     }
 
     void FixedUpdate() {
