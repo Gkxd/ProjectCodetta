@@ -7,7 +7,7 @@ public class FrameRateDisplay : MonoBehaviour {
     Rect rect;
     string text = "";
 
-    float fps;
+    float fps = 60;
 
     void Start() {
         int w = Screen.width, h = Screen.height;
@@ -16,12 +16,14 @@ public class FrameRateDisplay : MonoBehaviour {
 
         rect = new Rect(0, 0, w, 20);
         style.alignment = TextAnchor.UpperLeft;
+        style.fontSize = 50;
         style.normal.textColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
     }
 
     void Update() {
-        fps = 1f/Time.deltaTime;
+        fps -= fps / 120f;
+        fps += (1 / Time.deltaTime) / 120f;
     }
 
 
