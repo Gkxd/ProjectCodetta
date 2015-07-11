@@ -1,6 +1,16 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Materials/Skewed Texture.shader.meta
 guid: 6bf75a896b5e8b744844b3236d239dd2
 timeCreated: 1436479800
+=======
+<<<<<<< HEAD
+guid: 1f101bab0502d234495888d8a24129e7
+timeCreated: 1436033270
+=======
+guid: 72d0cfd3e4b90804d9ef16452011e123
+timeCreated: 1436034804
+>>>>>>> ba4b678d42af5c4eeaeb2d3605253183a10fb8b3
+>>>>>>> b840f386f6c0a254be80ef53f885d271db99fe4a:Assets/Materials/DualColorShader.shader.meta
 licenseType: Free
 ShaderImporter:
   defaultTextures: []
