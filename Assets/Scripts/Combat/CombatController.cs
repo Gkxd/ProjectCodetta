@@ -252,7 +252,7 @@ public class CombatController : MonoBehaviour {
             turn = 0;
 
             for (int i = 0; i < activeEnemies.Length; i++) {
-                GameObject.Destroy(activeEnemies[i].gameObject);
+                //GameObject.Destroy(activeEnemies[i].gameObject);
             }
             
             modeSwitch.switchToExplorationMode();
