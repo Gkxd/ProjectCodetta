@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scenes/SelectMenu.unity.meta
 guid: cf22b302a84abee4d81db2413d02c671
 timeCreated: 1436711673
+=======
+guid: c872ad52fd1e2e542b1662d7101e52df
+timeCreated: 1436644234
+>>>>>>> d7f84102a670ce0bbe8eaced4adacfbebd15453f:Assets/Scenes/Digital World.unity.meta
 licenseType: Free
 DefaultImporter:
   userData: 

@@ -1,7 +1,5 @@
 fileFormatVersion: 2
-guid: 0802f31fb6ab68c4493626661055c66a
-timeCreated: 1435952918
-licenseType: Free
+guid: 87be4190eae46cf459ae6177b8698f03
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -27,7 +25,7 @@ TextureImporter:
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
-  maxTextureSize: 2048
+  maxTextureSize: 1024
   textureSettings:
     filterMode: -1
     aniso: -1
@@ -52,4 +50,3 @@ TextureImporter:
   spritePackingTag: 
   userData: 
   assetBundleName: 
-  assetBundleVariant: 
