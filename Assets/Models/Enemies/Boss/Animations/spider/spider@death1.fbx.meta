@@ -65,6 +65,8 @@ ModelImporter:
     400038: //RootNode
     400040: torso
     7400000: death1
+    7400002: idle
+    7400004: damage
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -104,6 +106,142 @@ ModelImporter:
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature_SB
+        weight: 1
+      - path: Armature_SB/root
+        weight: 1
+      - path: Armature_SB/root/hips
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L/arm_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L/arm_back_L/claw_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R/arm_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R/arm_back_R/claw_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L/arm_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L/arm_L/claw_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R/arm_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R/arm_R/claw_R
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_L
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_L/small_claw2_L
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_R
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_R/small_claw2_R
+        weight: 1
+      - path: Armature_SB/root/hips/torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: idle
+      takeName: Action
+      firstFrame: 0
+      lastFrame: 3
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature_SB
+        weight: 1
+      - path: Armature_SB/root
+        weight: 1
+      - path: Armature_SB/root/hips
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L/arm_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_L/arm_back_L/claw_back_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R/arm_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_back_R/arm_back_R/claw_back_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L/arm_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_L/arm_L/claw_L
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R/arm_R
+        weight: 1
+      - path: Armature_SB/root/hips/shoulder_R/arm_R/claw_R
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_L
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_L/small_claw2_L
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_R
+        weight: 1
+      - path: Armature_SB/root/hips/small_claw_R/small_claw2_R
+        weight: 1
+      - path: Armature_SB/root/hips/torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: damage
+      takeName: Action
+      firstFrame: -1
+      lastFrame: 10
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
