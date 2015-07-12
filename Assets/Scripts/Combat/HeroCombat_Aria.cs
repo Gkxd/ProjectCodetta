@@ -5,6 +5,8 @@ public class HeroCombat_Aria : _HeroCombat {
 
     protected override void die() {
         Debug.Log("Aria has died.");
+
+        // Game over
     }
 
     protected sealed override void specialMove(_CombatParticipant other) {
@@ -13,6 +15,9 @@ public class HeroCombat_Aria : _HeroCombat {
 
             int damageAmount = Random.Range(minAttack * 2, maxAttack * 3);
             other.damage(damageAmount);
+
+            animator.SetTrigger("sword");
+            combatController.waitForAnimationFinished(animator);
         }
         else {
             Debug.Log("Aria does not have enough MP. Skipping turn...");

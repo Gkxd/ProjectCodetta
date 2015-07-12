@@ -17,9 +17,15 @@ public abstract class _CombatParticipant : MonoBehaviour {
     protected int currentHp;
     protected int currentMp;
 
+    protected Animator animator;
+    protected CombatController combatController;
+
     void Start() {
         currentHp = maxHp;
         currentMp = maxMp;
+
+        animator = GetComponent<Animator>();
+        combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
     }
 
     public void basicAttackOther(_CombatParticipant other) {
@@ -89,6 +95,15 @@ public abstract class _CombatParticipant : MonoBehaviour {
         else {
             Debug.Log(gameObject.name + " has missed.");
         }
+
+        if (this is _HeroCombat) {
+            animator.SetTrigger("sword");
+        }
+        else if (this is _EnemyCombat) {
+            animator.SetTrigger("Attack");
+        }
+
+        combatController.waitForAnimationFinished(animator);
     }
 
     protected virtual void specialMove(_CombatParticipant other) {

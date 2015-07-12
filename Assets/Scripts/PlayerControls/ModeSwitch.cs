@@ -12,7 +12,6 @@ public class ModeSwitch : MonoBehaviour {
     private PlayerMovement ariaMovement;
     private FollowPlayer brioMovement;
     private FollowPlayer cadenceMovement;
-    private Rigidbody playerRigidbody;
 
     public bool explorationMode = true;
 
@@ -21,7 +20,6 @@ public class ModeSwitch : MonoBehaviour {
 
     void Start() {
         ariaMovement = aria.GetComponent<PlayerMovement>();
-        playerRigidbody = aria.GetComponent<Rigidbody>();
 
         brioMovement = brio.GetComponent<FollowPlayer>();
         cadenceMovement = cadence.GetComponent<FollowPlayer>();

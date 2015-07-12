@@ -11,9 +11,11 @@ public class PlayerMovement : MonoBehaviour {
     float verticalAxis;
 
     private bool explorationMode;
+    private Animator animator;
 
     void Start() {
         explorationMode = true;
+        animator = GetComponent<Animator>();
     }
 
     void Update() {
@@ -25,15 +27,21 @@ public class PlayerMovement : MonoBehaviour {
             movementDirection.Scale(new Vector3(1, 0, 1)); // Project to horizontal plane
             movementDirection.Normalize();
 
+            animator.SetBool("moving", movementDirection.sqrMagnitude > 0);
+
             transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
         }
     }
 
     public void enterCombat() {
         explorationMode = false;
+
+        animator.SetBool("moving", false);
+        animator.SetBool("inCombat", true);
     }
 
     public void exitCombat() {
+        animator.SetBool("inCombat", false);
         explorationMode = true;
     }
 }

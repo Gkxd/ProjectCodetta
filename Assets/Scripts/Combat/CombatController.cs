@@ -20,6 +20,8 @@ public class CombatController : MonoBehaviour {
 
     public GameObject selectMenu;
 
+    public Transform mainCamera;
+
     public Transform droneSpawn1;
     public Transform droneSpawn2;
     public Transform droneSpawn3;
@@ -41,15 +43,19 @@ public class CombatController : MonoBehaviour {
     public int selectedTargetId;
 
     private int turn;
+    private bool animationFinished;
+    private Animator currentAnimator;
 
     void Start() {
         turn = 0;
 
         activeHeroes = new _HeroCombat[3] { ariaCombat, brioCombat, cadenceCombat };
+        animationFinished = true;
     }
 
     void OnEnable() {
         turn = 0;
+        animationFinished = true;
     }
 
     void Update() {
@@ -60,15 +66,61 @@ public class CombatController : MonoBehaviour {
 #endif
             advanceTurn();
         }
+
+        if (!animationFinished) {
+            if (currentAnimator == null) {
+                Debug.LogError("Something is missing an animator.");
+            }
+
+            if (currentAnimator.gameObject.GetComponent<_CombatParticipant>() is _EnemyCombat) {
+                if (currentAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
+                    animationFinished = true;
+                    selectMenu.SetActive(true);
+                }
+            }
+            else if (currentAnimator.gameObject.GetComponent<_CombatParticipant>() is _HeroCombat) {
+                if (currentAnimator.GetCurrentAnimatorStateInfo(0).IsName("Combat Idle")) {
+                    animationFinished = true;
+                    advanceTurn();
+                }
+            }
+        }
     }
 
     public void generateEnemies() {
-        GameObject newEnemy = GameObject.Instantiate<GameObject>(prefabDrone);
 
+        int additionalEnemies = Random.Range(1, 3);
+
+        GameObject newEnemy = GameObject.Instantiate<GameObject>(prefabDrone);
         newEnemy.transform.position = droneSpawn1.position;
         newEnemy.transform.rotation = droneSpawn1.rotation;
 
-        activeEnemies = new _EnemyCombat[] { newEnemy.GetComponent<_EnemyCombat>() };
+        if (additionalEnemies == 0) {
+            activeEnemies = new _EnemyCombat[] { newEnemy.GetComponent<_EnemyCombat>() };
+        }
+        else {
+            GameObject newEnemy2 = GameObject.Instantiate<GameObject>(prefabDrone);
+            newEnemy2.transform.position = droneSpawn2.position;
+            newEnemy2.transform.rotation = droneSpawn2.rotation;
+
+            if (additionalEnemies == 1) {
+                activeEnemies = new _EnemyCombat[] {
+                    newEnemy.GetComponent<_EnemyCombat>(),
+                    newEnemy2.GetComponent<_EnemyCombat>()
+                };
+            }
+            else {
+                GameObject newEnemy3 = GameObject.Instantiate<GameObject>(prefabDrone);
+                newEnemy3.transform.position = droneSpawn3.position;
+                newEnemy3.transform.rotation = droneSpawn3.rotation;
+
+                activeEnemies = new _EnemyCombat[] {
+                    newEnemy.GetComponent<_EnemyCombat>(),
+                    newEnemy2.GetComponent<_EnemyCombat>(),
+                    newEnemy3.GetComponent<_EnemyCombat>()
+                };
+            }
+        }
     }
 
     // Returns false if selection is bad
@@ -77,13 +129,13 @@ public class CombatController : MonoBehaviour {
             selectedCharacter = (HeroCharacter)row;
             selectedAction = HeroAction.Basic;
 
-            selectedTargetId = 0;
+            selectedTargetId = selectEnemyByLooking();
         }
         else if (col == 1 && row != 2) {
             selectedCharacter = (HeroCharacter)row;
             selectedAction = HeroAction.Special;
 
-            selectedTargetId = 0;
+            selectedTargetId = selectEnemyByLooking();
 
             if (!activeHeroes[(int)selectedCharacter].hasEnoughMp()) {
                 return false;
@@ -109,9 +161,35 @@ public class CombatController : MonoBehaviour {
         return true;
     }
 
+    public int selectEnemyByLooking() {
+
+        float minAngle = 9000;
+        int minIndex = -1;
+
+        for (int i = 0; i < activeEnemies.Length; i++) {
+            if (activeEnemies[i].isDead()) continue;
+
+            float angle = Vector3.Angle(activeEnemies[i].transform.position - mainCamera.position, mainCamera.forward);
+
+            if (angle < minAngle) {
+                minAngle = angle;
+                minIndex = i;
+            }
+
+        }
+
+        Debug.Log("Selected enemy: " + minIndex);
+        return minIndex;
+    }
+
     public void confirmSelection() {
         Debug.Log("Turn confirmed. Advancing...");
         advanceTurn();
+    }
+
+    public void waitForAnimationFinished(Animator animator) {
+        animationFinished = false;
+        currentAnimator = animator;
     }
 
     private void advanceTurn() {
@@ -131,7 +209,7 @@ public class CombatController : MonoBehaviour {
             }
         }
         else {
-            int activeEnemyId = (turn / 2) % activeEnemies.Length;
+            int activeEnemyId = getRandomLiveEnemy();
             _EnemyCombat activeEnemy = activeEnemies[activeEnemyId];
 
             bool specialAttack = Random.Range(0f, 1f) > 0.5f;
@@ -179,10 +257,16 @@ public class CombatController : MonoBehaviour {
             
             modeSwitch.switchToExplorationMode();
         }
-        else if (turn % 2 == 1) {
-            selectMenu.SetActive(true);
-        }
         
         turn++;
+    }
+    private int getRandomLiveEnemy() {
+        int index = Random.Range(0, activeEnemies.Length);
+
+        while (activeEnemies[index].isDead()) {
+            index = Random.Range(0, activeEnemies.Length);
+        }
+
+        return index;
     }
 }

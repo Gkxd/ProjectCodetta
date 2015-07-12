@@ -8,6 +8,7 @@ public class FollowPlayer : MonoBehaviour {
     public GameObject combatPosition;
 
     private NavMeshAgent navMeshAgent;
+    private Animator animator;
 
     private bool needsToFaceForward;
     private bool explorationMode;
@@ -16,6 +17,8 @@ public class FollowPlayer : MonoBehaviour {
         navMeshAgent = GetComponent<NavMeshAgent>();
         needsToFaceForward = false;
         explorationMode = true;
+
+        animator = gameObject.GetComponent<Animator>();
 	}
 
     void Update() {
@@ -26,6 +29,9 @@ public class FollowPlayer : MonoBehaviour {
             if (vectorToPlayer.sqrMagnitude > 4) {
                 navMeshAgent.SetDestination(followPosition.transform.position);
             }
+
+
+            animator.SetBool("moving", navMeshAgent.velocity.magnitude > 0);
         }
         else {
             if (needsToFaceForward) {
@@ -48,11 +54,15 @@ public class FollowPlayer : MonoBehaviour {
     }
 
     public void enterCombat() {
+        animator.SetBool("moving", false);
+        animator.SetBool("inCombat", true);
+
         explorationMode = false;
         enterCombatPosition();
     }
 
     public void exitCombat() {
+        animator.SetBool("inCombat", false);
         explorationMode = true;
     }
 
