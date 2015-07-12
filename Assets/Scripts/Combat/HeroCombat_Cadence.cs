@@ -9,7 +9,7 @@ public class HeroCombat_Cadence : _HeroCombat {
 
     protected sealed override void specialMove(_CombatParticipant other) {
         if (currentMp >= 10) {
-            currentMp -= 10;
+            useMP(10);
 
             int healAmount = Random.Range(minAttack, maxAttack * 2);
             other.heal(healAmount);
@@ -17,5 +17,9 @@ public class HeroCombat_Cadence : _HeroCombat {
         else {
             Debug.Log("Cadence does not have enough MP. Skipping turn...");
         }
+    }
+
+    public override bool hasEnoughMp() {
+        return currentMp >= 10;
     }
 }

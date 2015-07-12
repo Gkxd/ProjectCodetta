@@ -9,7 +9,7 @@ public class HeroCombat_Aria : _HeroCombat {
 
     protected sealed override void specialMove(_CombatParticipant other) {
         if (currentMp >= 10) {
-            currentMp -= 10;
+            useMP(10);
 
             int damageAmount = Random.Range(minAttack * 2, maxAttack * 3);
             other.damage(damageAmount);
@@ -17,5 +17,8 @@ public class HeroCombat_Aria : _HeroCombat {
         else {
             Debug.Log("Aria does not have enough MP. Skipping turn...");
         }
+    }
+    public override bool hasEnoughMp() {
+        return currentMp >= 10;
     }
 }

@@ -32,6 +32,6 @@ public class FrameRateDisplay : MonoBehaviour {
 
 
     void OnGUI() {
-        GUI.Label(rect, "" + fps, style);
+        GUI.Label(rect, "FPS: " + fps , style);
     }
 }

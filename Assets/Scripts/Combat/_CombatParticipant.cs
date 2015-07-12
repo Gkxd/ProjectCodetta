@@ -3,6 +3,9 @@ using System.Collections;
 
 public abstract class _CombatParticipant : MonoBehaviour {
 
+    public Transform hpBar;
+    public Transform mpBar;
+
     public int maxHp;
     public int maxMp;
     public int minAttack;
@@ -34,15 +37,45 @@ public abstract class _CombatParticipant : MonoBehaviour {
             currentHp = 0;
             die();
         }
+
+        if (hpBar != null) {
+            hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
+        }
     }
 
     public void heal(int amount) {
         Debug.Log(gameObject.name + " was healed for " + amount + " health.");
-        currentHp = Mathf.Min(currentHp, maxHp);
+        currentHp = Mathf.Min(currentHp + amount, maxHp);
+
+        if (hpBar != null) {
+            hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
+        }
+    }
+
+    public void useMP(int amount) {
+        Debug.Log(gameObject.name + " has used " + amount + " MP.");
+        currentMp = Mathf.Max(currentMp - amount, 0);
+
+        if (mpBar != null) {
+            mpBar.localScale = new Vector3(currentMp * 1f / maxMp, 1, 1);
+        }
+    }
+
+    public void healMP(int amount) {
+        Debug.Log(gameObject.name + " has recovered " + amount + " MP.");
+        currentMp = Mathf.Max(currentMp + amount, maxMp);
+
+        if (mpBar != null) {
+            mpBar.localScale = new Vector3(currentMp * 1f / maxMp, 1, 1);
+        }
     }
 
     public bool isDead() {
         return currentHp == 0;
+    }
+
+    public virtual bool hasEnoughMp() {
+        return false;
     }
 
     protected abstract void die();

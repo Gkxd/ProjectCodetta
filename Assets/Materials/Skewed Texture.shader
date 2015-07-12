@@ -2,14 +2,13 @@ Shader "ProjectCodetta/Horizontal Skew Texture Shader" {
 Properties {
     _MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
     _Color ("Tint", Color) = (0, 0, 0, 0)
-    _ColorBlend ("Tint Blending", int) = 0
 	_Skew ("Horizontal Skew", float) = 0
 }
 
 SubShader {
-    Tags {"Queue"="Geometry" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane"}
-    LOD 100
-     
+    Tags {"Queue"="Geometry" "IgnoreProjector"="True" "PreviewType"="Plane"}
+    LOD 0
+
     Cull Off
     ZWrite On
     Blend SrcAlpha OneMinusSrcAlpha
@@ -58,14 +57,7 @@ SubShader {
         {
             fixed4 col = tex2D(_MainTex, i.texcoord);
 
-            switch(_ColorBlend) {
-                case 1:
-                    col.rgb += _Color.rgb;
-                    break;
-                case 0: default:
-                    col.rgb *= _Color.rgb;
-                    break;
-            }
+			col.rgb *= _Color.rgb;
             col.a *= _Color.a;
             return col;
         }

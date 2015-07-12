@@ -9,7 +9,7 @@ public class HeroCombat_Brio : _HeroCombat {
 
     protected sealed override void specialMove(_CombatParticipant other) {
         if (currentMp >= 20) {
-            currentMp -= 20;
+            useMP(20);
 
             int damageAmount = Random.Range(minAttack + maxAttack, maxAttack * 3);
             other.damage(damageAmount);
@@ -17,5 +17,8 @@ public class HeroCombat_Brio : _HeroCombat {
         else {
             Debug.Log("Brio does not have enough MP. Skipping turn...");
         }
+    }
+    public override bool hasEnoughMp() {
+        return currentMp >= 20;
     }
 }

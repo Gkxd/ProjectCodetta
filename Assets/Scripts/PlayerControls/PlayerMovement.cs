@@ -5,15 +5,14 @@ public class PlayerMovement : MonoBehaviour {
 
     public float moveSpeed;
 
+    public Transform headTransform;
+
     float horizontalAxis;
     float verticalAxis;
-
-    Transform headTransform;
 
     private bool explorationMode;
 
     void Start() {
-        headTransform = transform.Find("PelvisRoot");
         explorationMode = true;
     }
 
@@ -26,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
             movementDirection.Scale(new Vector3(1, 0, 1)); // Project to horizontal plane
             movementDirection.Normalize();
 
-            transform.Translate(movementDirection * moveSpeed * Time.deltaTime);
+            transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
         }
     }
 

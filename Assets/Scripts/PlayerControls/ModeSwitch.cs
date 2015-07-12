@@ -6,6 +6,7 @@ public class ModeSwitch : MonoBehaviour {
     public GameObject aria;
     public GameObject brio;
     public GameObject cadence;
+    public GameObject selectMenu;
     public CombatController combatController;
 
     private PlayerMovement ariaMovement;
@@ -34,7 +35,6 @@ public class ModeSwitch : MonoBehaviour {
 
             if (timeSinceLastBattle > 10) {
                 if (Random.Range(0f, 1f) < (timeSinceLastBattle - 10) * 0.1f) {
-                    generateEnemies();
                     switchToCombatMode();
 
                     Debug.Log("Random Encounter at time " + Time.time + ". Time elapsed since last battle: " + timeSinceLastBattle);
@@ -42,8 +42,11 @@ public class ModeSwitch : MonoBehaviour {
             }
         }
 
-        
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0)) {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Space)) {
+#else
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3)) {
+#endif
             if (explorationMode) {
                 switchToCombatMode();
                 Debug.Log("Entering combat mode (debug)...");
@@ -55,12 +58,12 @@ public class ModeSwitch : MonoBehaviour {
         }
 	}
 
-    public void generateEnemies() {
-
-    }
-
     public void switchToCombatMode() {
         explorationMode = false;
+        combatController.enabled = true;
+
+        combatController.generateEnemies();
+        selectMenu.SetActive(true);
 
         ariaMovement.enterCombat();
         brioMovement.enterCombat();
@@ -69,6 +72,9 @@ public class ModeSwitch : MonoBehaviour {
 
     public void switchToExplorationMode() {
         explorationMode = true;
+        combatController.enabled = false;
+
+        selectMenu.SetActive(false);
 
         ariaMovement.exitCombat();
         brioMovement.exitCombat();
