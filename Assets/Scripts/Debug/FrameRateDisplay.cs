@@ -9,6 +9,10 @@ public class FrameRateDisplay : MonoBehaviour {
 
     float fps = 60;
 
+    void Awake() {
+        Application.targetFrameRate = -1;
+    }
+
     void Start() {
         int w = Screen.width, h = Screen.height;
 
