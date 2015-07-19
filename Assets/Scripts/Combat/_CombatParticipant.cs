@@ -37,24 +37,26 @@ public abstract class _CombatParticipant : MonoBehaviour {
     }
 
     public void damage(int amount) {
-        Debug.Log(gameObject.name + " has taken " + amount + " damage.");
+        //Debug.Log(gameObject.name + " has taken " + amount + " damage.");
         currentHp -= amount;
         if (currentHp <= 0) {
             currentHp = 0;
             die();
         }
 
-        if (hpBar != null) {
-            hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
-        }
+        hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
     }
 
     public void heal(int amount) {
         Debug.Log(gameObject.name + " was healed for " + amount + " health.");
         currentHp = Mathf.Min(currentHp + amount, maxHp);
 
-        if (hpBar != null) {
-            hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
+        hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
+
+        if (this is _HeroCombat) {
+            if (isDead()) {
+                // Do revive animation here
+            }
         }
     }
 
@@ -80,6 +82,10 @@ public abstract class _CombatParticipant : MonoBehaviour {
         return currentHp == 0;
     }
 
+    public bool canKillWithBasicAttack(_HeroCombat other) {
+        return other.currentHp <= maxAttack;
+    }
+
     public virtual bool hasEnoughMp() {
         return false;
     }
@@ -91,6 +97,7 @@ public abstract class _CombatParticipant : MonoBehaviour {
 
         if (Random.Range(0f, 1f) < accuracy) {
             other.damage(damageAmount);
+            Debug.Log(gameObject.name + " has done " + damageAmount + " damage to " + other.gameObject.name); 
         }
         else {
             Debug.Log(gameObject.name + " has missed.");
@@ -103,7 +110,9 @@ public abstract class _CombatParticipant : MonoBehaviour {
             animator.SetTrigger("Attack");
         }
 
-        combatController.waitForAnimationFinished(animator);
+
+        //combatController.waitForAnimationFinished(animator);
+        combatController.waitForParticipant(this, 4);
     }
 
     protected virtual void specialMove(_CombatParticipant other) {

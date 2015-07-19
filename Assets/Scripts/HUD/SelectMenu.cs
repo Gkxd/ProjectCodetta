@@ -17,6 +17,12 @@ public class SelectMenu : MonoBehaviour {
     private bool hasMovedUp = false;
     private bool hasMovedDown = false;
 
+    void Start() {
+        cursorRow = 0;
+        cursorCol = 0;
+    }
+
+
     void OnEnable() {
         cursorRow = 0;
         cursorCol = 0;

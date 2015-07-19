@@ -16,7 +16,8 @@ public class HeroCombat_Cadence : _HeroCombat {
             other.heal(healAmount);
 
             animator.SetTrigger("heal");
-            combatController.waitForAnimationFinished(animator);
+            //combatController.waitForAnimationFinished(animator);
+            combatController.waitForParticipant(this, 4);
         }
         else {
             Debug.Log("Cadence does not have enough MP. Skipping turn...");

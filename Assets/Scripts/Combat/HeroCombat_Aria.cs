@@ -17,7 +17,8 @@ public class HeroCombat_Aria : _HeroCombat {
             other.damage(damageAmount);
 
             animator.SetTrigger("sword");
-            combatController.waitForAnimationFinished(animator);
+            //combatController.waitForAnimationFinished(animator);
+            combatController.waitForParticipant(this, 4);
         }
         else {
             Debug.Log("Aria does not have enough MP. Skipping turn...");

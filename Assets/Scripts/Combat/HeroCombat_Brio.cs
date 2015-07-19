@@ -16,7 +16,8 @@ public class HeroCombat_Brio : _HeroCombat {
             other.damage(damageAmount);
 
             animator.SetTrigger("shoot");
-            combatController.waitForAnimationFinished(animator);
+            //combatController.waitForAnimationFinished(animator);
+            combatController.waitForParticipant(this, 4);
         }
         else {
             Debug.Log("Brio does not have enough MP. Skipping turn...");
