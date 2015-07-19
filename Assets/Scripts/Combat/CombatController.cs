@@ -70,7 +70,7 @@ public class CombatController : MonoBehaviour {
 #else
         if (Input.GetKeyDown(KeyCode.Joystick1Button0)) {
 #endif
-            advanceTurn();
+            //advanceTurn();
         }
         /*
         if (!animationFinished) {
@@ -233,13 +233,25 @@ public class CombatController : MonoBehaviour {
 
             if (selectedAction == HeroAction.Basic) {
                 selectedCharacterCombat.basicAttackOther(activeEnemies[selectedTargetId]);
+                if (!(selectedCharacterCombat is HeroCombat_Aria)) {
+                    selectedCharacterCombat.gameObject.transform.LookAt(activeEnemies[selectedTargetId].gameObject.transform);
+                    selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
+                }
             }
             else {
                 if (selectedCharacterCombat is HeroCombat_Cadence) {
                     selectedCharacterCombat.specialMoveOther(activeHeroes[selectedTargetId]);
+
+                    selectedCharacterCombat.gameObject.transform.LookAt(activeHeroes[selectedTargetId].gameObject.transform);
+                    selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
                 }
                 else {
                     selectedCharacterCombat.specialMoveOther(activeEnemies[selectedTargetId]);
+
+                    if (!(selectedCharacterCombat is HeroCombat_Aria)) {
+                        selectedCharacterCombat.gameObject.transform.LookAt(activeEnemies[selectedTargetId].gameObject.transform);
+                        selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
+                    }
                 }
             }
         }
@@ -279,6 +291,9 @@ public class CombatController : MonoBehaviour {
             else {
                 activeEnemy.basicAttackOther(targetHero);
             }
+
+            activeEnemy.gameObject.transform.LookAt(targetHero.transform);
+            activeEnemy.transform.eulerAngles.Scale(Vector3.up);
         }
 
         bool combatFinished = true;

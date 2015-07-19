@@ -37,11 +37,18 @@ public abstract class _CombatParticipant : MonoBehaviour {
     }
 
     public void damage(int amount) {
-        //Debug.Log(gameObject.name + " has taken " + amount + " damage.");
         currentHp -= amount;
         if (currentHp <= 0) {
             currentHp = 0;
             die();
+        }
+        else {
+            if (this is _HeroCombat) {
+                animator.SetBool("damaged", true);
+            }
+            else if (this is _EnemyCombat) {
+                animator.SetBool("Damage", true);
+            }
         }
 
         hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
@@ -104,7 +111,7 @@ public abstract class _CombatParticipant : MonoBehaviour {
         }
 
         if (this is _HeroCombat) {
-            animator.SetTrigger("sword");
+            animator.SetTrigger("basic");
         }
         else if (this is _EnemyCombat) {
             animator.SetTrigger("Attack");

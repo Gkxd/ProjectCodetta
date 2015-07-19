@@ -77,7 +77,7 @@ public class SelectMenu : MonoBehaviour {
                 hasMovedUp = false;
             }
         }
-        
+
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Z)) {
 #else

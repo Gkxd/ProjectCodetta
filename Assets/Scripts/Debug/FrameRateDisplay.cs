@@ -7,10 +7,11 @@ public class FrameRateDisplay : MonoBehaviour {
     Rect rect;
     string text = "";
 
-    float fps = 60;
+	public int targetFrameRate;
+	float fps = 0;
 
     void Awake() {
-        Application.targetFrameRate = -1;
+        Application.targetFrameRate = targetFrameRate;
     }
 
     void Start() {
