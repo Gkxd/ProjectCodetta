@@ -9,7 +9,8 @@ public class Lightning : MonoBehaviour {
 	public float lightningLifeTime;
 
 	private float spawnTimer = 0.0f;
-	public float spawnTime;
+	public float spawnTimeMin;
+	public float spawnTimeMax;
 
 	public Transform anchor;
 	public Transform cam;
@@ -40,7 +41,7 @@ public class Lightning : MonoBehaviour {
 			//play clouds
 			cloud.Play();
 			//restart the spawn timer
-			spawnTimer = spawnTime;
+			spawnTimer = Random.Range(spawnTimeMin,spawnTimeMax);
 			sparked = false;
 		} else {	
 			spawnTimer -= Time.deltaTime;
