@@ -46,16 +46,22 @@ public class CombatController : MonoBehaviour {
     private bool animationFinished;
     private Animator currentAnimator;
 
+    private bool waitForParticipantFinished;
+    private _CombatParticipant waitingParticipant;
+    private float finishedWaitingTime;
+
     void Start() {
         turn = 0;
 
         activeHeroes = new _HeroCombat[3] { ariaCombat, brioCombat, cadenceCombat };
-        animationFinished = true;
+        //animationFinished = true;
+        waitForParticipantFinished = true;
     }
 
     void OnEnable() {
         turn = 0;
-        animationFinished = true;
+        //animationFinished = true;
+        waitForParticipantFinished = true;
     }
 
     void Update() {
@@ -64,9 +70,9 @@ public class CombatController : MonoBehaviour {
 #else
         if (Input.GetKeyDown(KeyCode.Joystick1Button0)) {
 #endif
-            advanceTurn();
+            //advanceTurn();
         }
-
+        /*
         if (!animationFinished) {
             if (currentAnimator == null) {
                 Debug.LogError("Something is missing an animator.");
@@ -85,11 +91,36 @@ public class CombatController : MonoBehaviour {
                 }
             }
         }
+        */
+
+        if (!waitForParticipantFinished) {
+            if (Time.time > finishedWaitingTime) {
+                waitForParticipantFinished = true;
+
+                if (waitingParticipant is _EnemyCombat) {
+                    selectMenu.SetActive(true);
+                }
+                else if (waitingParticipant is _HeroCombat) {
+                    advanceTurn();
+                }
+            }
+        }
+
+        int selectedEnemyId = selectEnemyByLooking();
+
+        for (int i = 0; i < activeEnemies.Length; i++) {
+            if (i == selectedEnemyId) {
+                activeEnemies[i].selectEnemy();
+            }
+            else {
+                activeEnemies[i].deselectEnemy();
+            }
+        }
     }
 
     public void generateEnemies() {
 
-        int additionalEnemies = Random.Range(1, 3);
+        int additionalEnemies = Random.Range(0, 3);
 
         GameObject newEnemy = GameObject.Instantiate<GameObject>(prefabDrone);
         newEnemy.transform.position = droneSpawn1.position;
@@ -178,12 +209,10 @@ public class CombatController : MonoBehaviour {
 
         }
 
-        Debug.Log("Selected enemy: " + minIndex);
         return minIndex;
     }
 
     public void confirmSelection() {
-        Debug.Log("Turn confirmed. Advancing...");
         advanceTurn();
     }
 
@@ -192,45 +221,68 @@ public class CombatController : MonoBehaviour {
         currentAnimator = animator;
     }
 
+    public void waitForParticipant(_CombatParticipant participant, float seconds) {
+        waitForParticipantFinished = false;
+        waitingParticipant = participant;
+        finishedWaitingTime = Time.time + seconds;
+    }
+
     private void advanceTurn() {
         if (turn % 2 == 0) {
             _HeroCombat selectedCharacterCombat = activeHeroes[(int)selectedCharacter];
 
             if (selectedAction == HeroAction.Basic) {
                 selectedCharacterCombat.basicAttackOther(activeEnemies[selectedTargetId]);
+                if (!(selectedCharacterCombat is HeroCombat_Aria)) {
+                    selectedCharacterCombat.gameObject.transform.LookAt(activeEnemies[selectedTargetId].gameObject.transform);
+                    selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
+                }
             }
             else {
                 if (selectedCharacterCombat is HeroCombat_Cadence) {
                     selectedCharacterCombat.specialMoveOther(activeHeroes[selectedTargetId]);
+
+                    selectedCharacterCombat.gameObject.transform.LookAt(activeHeroes[selectedTargetId].gameObject.transform);
+                    selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
                 }
                 else {
                     selectedCharacterCombat.specialMoveOther(activeEnemies[selectedTargetId]);
+
+                    if (!(selectedCharacterCombat is HeroCombat_Aria)) {
+                        selectedCharacterCombat.gameObject.transform.LookAt(activeEnemies[selectedTargetId].gameObject.transform);
+                        selectedCharacterCombat.gameObject.transform.eulerAngles.Scale(Vector3.up);
+                    }
                 }
             }
         }
         else {
-            int activeEnemyId = getRandomLiveEnemy();
+            int activeEnemyId = getRandomLiveParticipant(activeEnemies);
             _EnemyCombat activeEnemy = activeEnemies[activeEnemyId];
 
             bool specialAttack = Random.Range(0f, 1f) > 0.5f;
             _HeroCombat targetHero;
 
-            if (!brioCombat.isDead() && !cadenceCombat.isDead()) {
-                if (Random.Range(0f, 1f) > 0.5f) {
+            if (activeEnemy.canKillWithBasicAttack(ariaCombat)) {
+                if (!brioCombat.isDead() && !cadenceCombat.isDead()) {
+                    if (Random.Range(0f, 1f) > 0.5f) {
+                        targetHero = brioCombat;
+                    }
+                    else {
+                        targetHero = cadenceCombat;
+                    }
+                }
+                else if (!brioCombat.isDead()) {
                     targetHero = brioCombat;
                 }
-                else {
+                else if (!cadenceCombat.isDead()) {
                     targetHero = cadenceCombat;
                 }
-            }
-            else if (!brioCombat.isDead()) {
-                targetHero = brioCombat;
-            }
-            else if (!cadenceCombat.isDead()) {
-                targetHero = cadenceCombat;
+                else {
+                    targetHero = ariaCombat;
+                }
             }
             else {
-                targetHero = ariaCombat;
+                targetHero = activeHeroes[getRandomLiveParticipant(activeHeroes)];
             }
 
             if (specialAttack) {
@@ -239,6 +291,9 @@ public class CombatController : MonoBehaviour {
             else {
                 activeEnemy.basicAttackOther(targetHero);
             }
+
+            activeEnemy.gameObject.transform.LookAt(targetHero.transform);
+            activeEnemy.transform.eulerAngles.Scale(Vector3.up);
         }
 
         bool combatFinished = true;
@@ -252,21 +307,44 @@ public class CombatController : MonoBehaviour {
             turn = 0;
 
             for (int i = 0; i < activeEnemies.Length; i++) {
-                //GameObject.Destroy(activeEnemies[i].gameObject);
+                GameObject.Destroy(activeEnemies[i].gameObject);
             }
-            
+
+            if (brioCombat.isDead()) {
+                brioCombat.heal(10);
+            }
+
+            if (cadenceCombat.isDead()) {
+                cadenceCombat.heal(10);
+            }
+
             modeSwitch.switchToExplorationMode();
         }
         
         turn++;
     }
-    private int getRandomLiveEnemy() {
-        int index = Random.Range(0, activeEnemies.Length);
-
-        while (activeEnemies[index].isDead()) {
-            index = Random.Range(0, activeEnemies.Length);
+    private int getRandomLiveParticipant(_CombatParticipant[] participants) {
+        int numParticipants = 0;
+        for (int i = 0; i < participants.Length; i++) {
+            if (!participants[i].isDead()) {
+                numParticipants++;
+            }
         }
 
-        return index;
+        if (numParticipants == 0) {
+            return -1;
+        }
+
+        int[] liveParticipants = new int[numParticipants];
+
+        for (int i = 0, j = 0; i < activeEnemies.Length; i++) {
+            if (!activeEnemies[i].isDead()) {
+                liveParticipants[j++] = i;
+            }
+        }
+
+        int randomIndex = Random.Range(0, numParticipants);
+
+        return liveParticipants[randomIndex];
     }
 }
