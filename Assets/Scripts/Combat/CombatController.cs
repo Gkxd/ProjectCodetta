@@ -154,6 +154,47 @@ public class CombatController : MonoBehaviour {
         }
     }
 
+    public void generateEnemiesUsingCombatTrigger(CombatTrigger ct) {
+        int additionalEnemies = Random.Range(1, 3);
+
+        GameObject newEnemy = GameObject.Instantiate<GameObject>(prefabSpider);
+        newEnemy.transform.position = ct.spiderSpawn1.position;
+        newEnemy.transform.rotation = ct.spiderSpawn1.rotation;
+
+        if (additionalEnemies == 0) {
+            activeEnemies = new _EnemyCombat[] { newEnemy.GetComponent<_EnemyCombat>() };
+        }
+        else {
+            GameObject newEnemy2 = GameObject.Instantiate<GameObject>(prefabSpider);
+            newEnemy2.transform.position = ct.spiderSpawn2.position;
+            newEnemy2.transform.rotation = ct.spiderSpawn2.rotation;
+
+            if (additionalEnemies == 1) {
+                activeEnemies = new _EnemyCombat[] {
+                    newEnemy.GetComponent<_EnemyCombat>(),
+                    newEnemy2.GetComponent<_EnemyCombat>()
+                };
+            }
+            else {
+                GameObject newEnemy3 = GameObject.Instantiate<GameObject>(prefabSpider);
+                newEnemy3.transform.position = ct.spiderSpawn3.position;
+                newEnemy3.transform.rotation = ct.spiderSpawn3.rotation;
+
+                activeEnemies = new _EnemyCombat[] {
+                    newEnemy.GetComponent<_EnemyCombat>(),
+                    newEnemy2.GetComponent<_EnemyCombat>(),
+                    newEnemy3.GetComponent<_EnemyCombat>()
+                };
+            }
+        }
+    }
+
+    public void generateBossBattle(BossBattleTrigger bossTrigger) {
+        activeEnemies = new _EnemyCombat[] {
+            bossTrigger.GetComponent<_EnemyCombat>()
+        };
+    }
+
     // Returns false if selection is bad
     public bool makeSelectionFromHUD(int row, int col) {
         if (col == 0) {

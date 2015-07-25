@@ -22,6 +22,7 @@ public class ModeSwitch : MonoBehaviour {
 
     public bool cutsceneMode = false;
     public bool explorationMode = true;
+    public bool randomEncounters = true;
 
     private float timeOfLastBattle = 0;
 
@@ -41,20 +42,22 @@ public class ModeSwitch : MonoBehaviour {
 
     void Update() {
         if (cutsceneMode) {
-            
+
         }
-        else if (explorationMode) {
-            float timeSinceLastBattle = Time.time - timeOfLastBattle;
+        else if (randomEncounters) {
+            if (explorationMode) {
+                float timeSinceLastBattle = Time.time - timeOfLastBattle;
 
-            if (timeSinceLastBattle > 10) {
-                if (Random.Range(0f, 1f) < (timeSinceLastBattle - 10) * 0.1f) {
-                    switchToCombatMode();
+                if (timeSinceLastBattle > 10) {
+                    if (Random.Range(0f, 1f) < (timeSinceLastBattle - 10) * 0.1f) {
+                        switchToCombatMode();
 
-                    Debug.Log("Random Encounter at time " + Time.time + ". Time elapsed since last battle: " + timeSinceLastBattle);
+                        Debug.Log("Random Encounter at time " + Time.time + ". Time elapsed since last battle: " + timeSinceLastBattle);
+                    }
                 }
             }
         }
-	}
+    }
 
     public void switchOnCutsceneMode() {
         cutsceneMode = true;
@@ -99,6 +102,30 @@ public class ModeSwitch : MonoBehaviour {
         cadenceMovement.exitCombat();
 
         timeOfLastBattle = Time.time;
+    }
+
+    public static void triggerCombatMode(CombatTrigger trigger) {
+        instance.explorationMode = false;
+        instance.combatController.enabled = true;
+
+        instance.combatController.generateEnemiesUsingCombatTrigger(trigger);
+        instance.selectMenu.SetActive(true);
+
+        instance.ariaMovement.enterCombat();
+        instance.brioMovement.enterCombat();
+        instance.cadenceMovement.enterCombat();
+    }
+
+    public static void triggerBossBattle(BossBattleTrigger trigger) {
+        instance.explorationMode = false;
+        instance.combatController.enabled = true;
+
+        instance.combatController.generateBossBattle(trigger);
+        instance.selectMenu.SetActive(true);
+
+        instance.ariaMovement.enterCombat();
+        instance.brioMovement.enterCombat();
+        instance.cadenceMovement.enterCombat();
     }
 
     public static bool isCutscene() {
