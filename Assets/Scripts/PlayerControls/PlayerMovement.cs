@@ -19,17 +19,19 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Update() {
-        if (explorationMode) {
-            horizontalAxis = Input.GetAxisRaw("Horizontal");
-            verticalAxis = Input.GetAxisRaw("Vertical");
+        if (!ModeSwitch.isCutscene()) {
+            if (explorationMode) {
+                horizontalAxis = Input.GetAxisRaw("Horizontal");
+                verticalAxis = Input.GetAxisRaw("Vertical");
 
-            Vector3 movementDirection = (verticalAxis * headTransform.forward + horizontalAxis * headTransform.right);
-            movementDirection.Scale(new Vector3(1, 0, 1)); // Project to horizontal plane
-            movementDirection.Normalize();
+                Vector3 movementDirection = (verticalAxis * headTransform.forward + horizontalAxis * headTransform.right);
+                movementDirection.Scale(new Vector3(1, 0, 1)); // Project to horizontal plane
+                movementDirection.Normalize();
 
-            animator.SetBool("moving", movementDirection.sqrMagnitude > 0);
+                animator.SetBool("moving", movementDirection.sqrMagnitude > 0);
 
-            transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
+                transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
+            }
         }
     }
 

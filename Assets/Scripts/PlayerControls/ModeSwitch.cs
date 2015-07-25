@@ -3,19 +3,31 @@ using System.Collections;
 
 public class ModeSwitch : MonoBehaviour {
 
+    private static ModeSwitch instance;
+
     public GameObject aria;
     public GameObject brio;
     public GameObject cadence;
     public GameObject selectMenu;
     public CombatController combatController;
 
+    public GameObject textBox;
+    public GameObject ariaHud;
+    public GameObject brioHud;
+    public GameObject cadenceHud;
+
     private PlayerMovement ariaMovement;
     private FollowPlayer brioMovement;
     private FollowPlayer cadenceMovement;
 
+    public bool cutsceneMode = false;
     public bool explorationMode = true;
 
     private float timeOfLastBattle = 0;
+
+    void Awake() {
+        instance = this;
+    }
 
 
     void Start() {
@@ -28,7 +40,10 @@ public class ModeSwitch : MonoBehaviour {
     }
 
     void Update() {
-        if (explorationMode) {
+        if (cutsceneMode) {
+            
+        }
+        else if (explorationMode) {
             float timeSinceLastBattle = Time.time - timeOfLastBattle;
 
             if (timeSinceLastBattle > 10) {
@@ -39,22 +54,27 @@ public class ModeSwitch : MonoBehaviour {
                 }
             }
         }
-
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Space)) {
-#else
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3)) {
-#endif
-            if (explorationMode) {
-                switchToCombatMode();
-                Debug.Log("Entering combat mode (debug)...");
-            }
-            else {
-                switchToExplorationMode();
-                Debug.Log("Exiting combat mode (debug)...");
-            }
-        }
 	}
+
+    public void switchOnCutsceneMode() {
+        cutsceneMode = true;
+        textBox.SetActive(true);
+
+        ariaHud.SetActive(false);
+        brioHud.SetActive(false);
+        cadenceHud.SetActive(false);
+    }
+
+    public void switchOffCutsceneMode() {
+        cutsceneMode = false;
+        textBox.SetActive(false);
+
+        ariaHud.SetActive(true);
+        brioHud.SetActive(true);
+        cadenceHud.SetActive(true);
+
+        timeOfLastBattle = Time.time;
+    }
 
     public void switchToCombatMode() {
         explorationMode = false;
@@ -79,5 +99,17 @@ public class ModeSwitch : MonoBehaviour {
         cadenceMovement.exitCombat();
 
         timeOfLastBattle = Time.time;
+    }
+
+    public static bool isCutscene() {
+        return instance.cutsceneMode;
+    }
+
+    public static void switchCutsceneOn() {
+        instance.switchOnCutsceneMode();
+    }
+
+    public static void switchCutsceneOff() {
+        instance.switchOffCutsceneMode();
     }
 }

@@ -11,8 +11,10 @@ public abstract class _CombatParticipant : MonoBehaviour {
     public int minAttack;
     public int maxAttack;
 
-    [Range(0.0f, 1.0f)]
-    public float accuracy;
+    public ParticleSystem particleBasicAttack;
+    public ParticleSystem particleSpecialAttack;
+    public ParticleSystem particleHurt;
+    public ParticleSystem particleDeath;
 
     protected int currentHp;
     protected int currentMp;
@@ -30,10 +32,18 @@ public abstract class _CombatParticipant : MonoBehaviour {
 
     public void basicAttackOther(_CombatParticipant other) {
         basicAttack(other);
+
+        if (particleBasicAttack != null) {
+            particleBasicAttack.Play();
+        }
     }
 
     public void specialMoveOther(_CombatParticipant other) {
         specialMove(other);
+
+        if (particleSpecialAttack != null) {
+            particleSpecialAttack.Play();
+        }
     }
 
     public void damage(int amount) {
@@ -41,6 +51,10 @@ public abstract class _CombatParticipant : MonoBehaviour {
         if (currentHp <= 0) {
             currentHp = 0;
             die();
+
+            if (particleDeath != null) {
+                particleDeath.Play();
+            }
         }
         else {
             if (this is _HeroCombat) {
@@ -48,6 +62,10 @@ public abstract class _CombatParticipant : MonoBehaviour {
             }
             else if (this is _EnemyCombat) {
                 animator.SetBool("Damage", true);
+            }
+
+            if (particleHurt != null) {
+                particleHurt.Play();
             }
         }
 
@@ -102,13 +120,8 @@ public abstract class _CombatParticipant : MonoBehaviour {
     protected virtual void basicAttack(_CombatParticipant other) {
         int damageAmount = Random.Range(minAttack, maxAttack);
 
-        if (Random.Range(0f, 1f) < accuracy) {
-            other.damage(damageAmount);
-            Debug.Log(gameObject.name + " has done " + damageAmount + " damage to " + other.gameObject.name); 
-        }
-        else {
-            Debug.Log(gameObject.name + " has missed.");
-        }
+        other.damage(damageAmount);
+        Debug.Log(gameObject.name + " has done " + damageAmount + " damage to " + other.gameObject.name); 
 
         if (this is _HeroCombat) {
             animator.SetTrigger("basic");
