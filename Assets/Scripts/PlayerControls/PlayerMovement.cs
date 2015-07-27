@@ -28,8 +28,13 @@ public class PlayerMovement : MonoBehaviour {
                 movementDirection.Scale(new Vector3(1, 0, 1)); // Project to horizontal plane
                 movementDirection.Normalize();
 
-                animator.SetBool("moving", movementDirection.sqrMagnitude > 0);
-
+				if(movementDirection.sqrMagnitude > 0) {
+					animator.SetBool("moving", true);
+					gameObject.GetComponent<AudioSource>().volume = .5f;
+				} else {
+					animator.SetBool("moving", false);
+					gameObject.GetComponent<AudioSource>().volume = 0f;
+				}
                 transform.Translate(movementDirection * moveSpeed * Time.deltaTime, Space.World);
             }
         }
@@ -39,6 +44,7 @@ public class PlayerMovement : MonoBehaviour {
         explorationMode = false;
 
         animator.SetBool("moving", false);
+		gameObject.GetComponent<AudioSource>().volume = 0f;
         animator.SetBool("inCombat", true);
     }
 

@@ -34,14 +34,15 @@ public class CutsceneController : MonoBehaviour {
 #else
             if (Input.GetKeyDown(KeyCode.Joystick1Button0)) {
 #endif
-                advanceCutscene();
+			    gameObject.GetComponent<AudioSource>().Play ();
+			    advanceCutscene();
             }
         }
 	}
 
     private void advanceCutscene() {
         cutsceneStep++;
-
+		
         if (cutsceneStep < currentCutscene.cutsceneSteps.Length) {
             CutsceneStep step = currentCutscene.cutsceneSteps[cutsceneStep];
             textBox.setText(step.text, step.speaker);

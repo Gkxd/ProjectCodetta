@@ -25,6 +25,9 @@ public class ModeSwitch : MonoBehaviour {
     public bool randomEncounters = true;
 
     private float timeOfLastBattle = 0;
+	private float waitTime = 0;
+	public float battleWaitMin;
+	public float battleWaitMax;
 
     void Awake() {
         instance = this;
@@ -38,20 +41,22 @@ public class ModeSwitch : MonoBehaviour {
         cadenceMovement = cadence.GetComponent<FollowPlayer>();
 
         combatController.enabled = false;
-    }
+
+		waitTime = Random.Range(battleWaitMin,battleWaitMax);
+	}
 
     void Update() {
         if (cutsceneMode) {
+		}
 
-        }
         else if (randomEncounters) {
             if (explorationMode) {
                 float timeSinceLastBattle = Time.time - timeOfLastBattle;
 
-                if (timeSinceLastBattle > 10) {
+                if (timeSinceLastBattle > waitTime) {
                     if (Random.Range(0f, 1f) < (timeSinceLastBattle - 10) * 0.1f) {
                         switchToCombatMode();
-
+						waitTime = Random.Range(battleWaitMin,battleWaitMax);
                         Debug.Log("Random Encounter at time " + Time.time + ". Time elapsed since last battle: " + timeSinceLastBattle);
                     }
                 }
@@ -60,12 +65,18 @@ public class ModeSwitch : MonoBehaviour {
     }
 
     public void switchOnCutsceneMode() {
-        cutsceneMode = true;
+		cutsceneMode = true;
         textBox.SetActive(true);
 
         ariaHud.SetActive(false);
         brioHud.SetActive(false);
         cadenceHud.SetActive(false);
+
+		gameObject.GetComponent<AudioSource>().Play ();
+		aria.GetComponent<Animator>().SetBool("moving",false);
+		aria.GetComponent<AudioSource>().volume = 0f;
+		brio.GetComponent<Animator>().SetBool("moving",false);
+	    cadence.GetComponent<Animator>().SetBool("moving",false);
     }
 
     public void switchOffCutsceneMode() {

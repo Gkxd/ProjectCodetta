@@ -43,8 +43,11 @@ public class CombatController : MonoBehaviour {
     public int selectedTargetId;
 
     private int turn;
+	public float turnDuration;
     private bool animationFinished;
     private Animator currentAnimator;
+
+	public int healAmount;
 
     private bool waitForParticipantFinished;
     private _CombatParticipant waitingParticipant;
@@ -265,7 +268,8 @@ public class CombatController : MonoBehaviour {
     public void waitForParticipant(_CombatParticipant participant, float seconds) {
         waitForParticipantFinished = false;
         waitingParticipant = participant;
-        finishedWaitingTime = Time.time + seconds;
+        //finishedWaitingTime = Time.time + seconds;
+		finishedWaitingTime = Time.time + turnDuration;
     }
 
     private void advanceTurn() {
@@ -352,11 +356,11 @@ public class CombatController : MonoBehaviour {
             }
 
             if (brioCombat.isDead()) {
-                brioCombat.heal(10);
+                brioCombat.heal(healAmount);
             }
 
             if (cadenceCombat.isDead()) {
-                cadenceCombat.heal(10);
+                cadenceCombat.heal(healAmount);
             }
 
             modeSwitch.switchToExplorationMode();

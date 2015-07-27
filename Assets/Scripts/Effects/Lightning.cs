@@ -56,6 +56,8 @@ public class Lightning : MonoBehaviour {
 				} else {
 					gameObject.GetComponent<Renderer>().material.mainTextureScale = new Vector2(-0.5f,0.5f);
 				}
+				gameObject.GetComponent<AudioSource>().pitch = Random.Range(0.5f,1f);
+				gameObject.GetComponent<AudioSource>().Play();
 				sparked = true;
 				sparks.Play();
 			}

@@ -11,10 +11,10 @@ public abstract class _CombatParticipant : MonoBehaviour {
     public int minAttack;
     public int maxAttack;
 
-    public ParticleSystem particleBasicAttack;
-    public ParticleSystem particleSpecialAttack;
-    public ParticleSystem particleHurt;
-    public ParticleSystem particleDeath;
+    public GameObject particleBasicAttack;
+    public GameObject particleSpecialAttack;
+    public GameObject particleHurt;
+    public GameObject particleDeath;
 
     protected int currentHp;
     protected int currentMp;
@@ -34,7 +34,12 @@ public abstract class _CombatParticipant : MonoBehaviour {
         basicAttack(other);
 
         if (particleBasicAttack != null) {
-            particleBasicAttack.Play();
+			if( particleBasicAttack.GetComponent<ParticleSystem>() != null) {
+				particleBasicAttack.GetComponent<ParticleSystem>().Play();
+			}
+			if( particleBasicAttack.GetComponent<AudioSource>()) {
+				particleBasicAttack.GetComponent<AudioSource>().Play();
+			}
         }
     }
 
@@ -42,8 +47,13 @@ public abstract class _CombatParticipant : MonoBehaviour {
         specialMove(other);
 
         if (particleSpecialAttack != null) {
-            particleSpecialAttack.Play();
-        }
+			if( particleSpecialAttack.GetComponent<ParticleSystem>() != null) {
+				particleSpecialAttack.GetComponent<ParticleSystem>().Play();
+			}
+			if( particleSpecialAttack.GetComponent<AudioSource>() != null) {
+				particleSpecialAttack.GetComponent<AudioSource>().Play();
+			}
+		}
     }
 
     public void damage(int amount) {
@@ -53,8 +63,13 @@ public abstract class _CombatParticipant : MonoBehaviour {
             die();
 
             if (particleDeath != null) {
-                particleDeath.Play();
-            }
+				if( particleDeath.GetComponent<ParticleSystem>() != null) {
+					particleDeath.GetComponent<ParticleSystem>().Play();
+				}
+				if( particleDeath.GetComponent<AudioSource>() != null) {
+					particleDeath.GetComponent<AudioSource>().Play();
+				}
+			}
         }
         else {
             if (this is _HeroCombat) {
@@ -65,10 +80,14 @@ public abstract class _CombatParticipant : MonoBehaviour {
             }
 
             if (particleHurt != null) {
-                particleHurt.Play();
-            }
+				if( particleHurt.GetComponent<ParticleSystem>() != null) {
+					particleHurt.GetComponent<ParticleSystem>().Play();
+				}
+				if( particleHurt.GetComponent<AudioSource>() != null) {
+					particleHurt.GetComponent<AudioSource>().Play();
+				}
+			}
         }
-
         hpBar.localScale = new Vector3(currentHp * 1f / maxHp, 1, 1);
     }
 
